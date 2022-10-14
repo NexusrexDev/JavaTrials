@@ -1,6 +1,17 @@
 package MonteCarloSimulation;
 
 public class GUI {
+    //This method flushes the UI/Console
+    public static void clearConsole() {
+        final String os = System.getProperty("os.name");
+        try {
+            if (os.contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        } catch (Exception e) {}
+    }
+
     public static void printValues(String title, int[] values, int pauseTime) {
         System.out.print(title);
         GUI.wait(pauseTime);
