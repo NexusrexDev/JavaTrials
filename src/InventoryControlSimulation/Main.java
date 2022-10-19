@@ -4,11 +4,13 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        int demandSize, leadTimeSize, simDays, simReorder, simQuantity;
+        int demandSize, leadTimeSize, simDays, simReorder, simQuantity, days;
+        double orderCost, holdCost, lossCost;
         Simulation sim;
         Table demandTable, leadTimeTable;
         Scanner input = new Scanner(System.in);
 
+        //Demand table
         System.out.print("Enter the demand table size: ");
         demandSize = input.nextInt();
         demandTable = new Table(demandSize);
@@ -21,6 +23,7 @@ public class Main {
         }
         demandTable.enterValue(demand, freq);
 
+        //Lead time table
         System.out.print("Enter the lead time table size: ");
         leadTimeSize = input.nextInt();
         leadTimeTable = new Table(leadTimeSize);
@@ -33,6 +36,7 @@ public class Main {
         }
         leadTimeTable.enterValue(leadTime, orders);
 
+        //Controllable variables
         System.out.print("Enter the number of days to simulate: ");
         simDays = input.nextInt();
         System.out.print("Enter the reordering point: ");
@@ -40,16 +44,12 @@ public class Main {
         System.out.print("Enter the order quantity: ");
         simQuantity = input.nextInt();
 
+        //Simulation starting and output
         sim = new Simulation(simDays, simReorder, simQuantity, demandTable, leadTimeTable);
         sim.startSimulation();
+        String[][] simulationOutput = sim.toTable();
 
-        for (String[] strings : sim.toTable()) {
-            System.out.println(Arrays.deepToString(strings));
-        }
-
-        int days;
-        double orderCost, holdCost, lossCost;
-
+        //Cost calculation
         System.out.print("Enter the number of active days per year: ");
         days = input.nextInt();
         System.out.print("Enter the ordering cost: ");
@@ -59,11 +59,14 @@ public class Main {
         System.out.print("Enter the lost sales cost: ");
         lossCost = input.nextInt();
 
-        String[] str = {"Daily order cost: ", "Daily holding cost: ", "Daily stockout cost: ",
-                "Total daily inventory cost: ", "Total yearly inventory cost: "};
         double[] costs = sim.calculateCosts(days, orderCost, holdCost, lossCost);
-        for (int i = 0; i < 4; i++) {
-            System.out.println(str[i] + costs[i]);
-        }
+
+        //Output
+        final String[] columnNames = {"Days", "Units Received", "Beginning Inventory", "Random Number",
+                "Demand", "Ending Inventory", "Lost Sales", "Order", "Random Number", "Lead Time"};
+        final String[] costNames = {"Daily order cost = ", "Daily holding cost = ",
+                "Daily stockout cost = ", "Total daily inventory cost = ", "Total yearly inventory cost = "};
+
+        new outputFrame(simReorder, simQuantity, columnNames, simulationOutput, costNames, costs);
     }
 }
