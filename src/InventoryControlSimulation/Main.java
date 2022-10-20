@@ -3,38 +3,19 @@ package InventoryControlSimulation;
 import java.util.*;
 
 public class Main {
+    static Scanner input = new Scanner(System.in);
     public static void main(String[] args) {
-        int demandSize, leadTimeSize, simDays, simReorder, simQuantity, days;
+        int simDays, simReorder, simQuantity, days;
         double orderCost, holdCost, lossCost;
         Simulation sim;
-        Table demandTable, leadTimeTable;
-        Scanner input = new Scanner(System.in);
+        Table demandTable = new Table();
+        Table leadTimeTable = new Table();
 
         //Demand table
-        System.out.print("Enter the demand table size: ");
-        demandSize = input.nextInt();
-        demandTable = new Table(demandSize);
-        int[] demand = new int[demandSize];
-        int[] freq = new int[demandSize];
-        System.out.println("Enter the data in the form (Demand Freqency): ");
-        for (int i = 0; i < demandSize; i++) {
-            demand[i] = input.nextInt();
-            freq[i] = input.nextInt();
-        }
-        demandTable.enterValue(demand, freq);
+        tableFill(demandTable, "demand table", "demand", "frequency");
 
         //Lead time table
-        System.out.print("Enter the lead time table size: ");
-        leadTimeSize = input.nextInt();
-        leadTimeTable = new Table(leadTimeSize);
-        int[] leadTime = new int[leadTimeSize];
-        int[] orders = new int[leadTimeSize];
-        System.out.println("Enter the data in the form (LeadTime Orders): ");
-        for (int i = 0; i < leadTimeSize; i++) {
-            leadTime[i] = input.nextInt();
-            orders[i] = input.nextInt();
-        }
-        leadTimeTable.enterValue(leadTime, orders);
+        tableFill(leadTimeTable, "lead time table", "leadtime", "frequency");
 
         //Controllable variables
         System.out.print("Enter the number of days to simulate: ");
@@ -68,5 +49,22 @@ public class Main {
                 "Daily stockout cost = ", "Total daily inventory cost = ", "Total yearly inventory cost = "};
 
         new outputFrame(simReorder, simQuantity, columnNames, simulationOutput, costNames, costs);
+    }
+
+    static void tableFill(Table tableRef, String tableName, String className, String freqName) {
+        //Abstract table filling
+        int tableSize;
+        int[] classValues, freqValues;
+        System.out.print("Enter the " + tableName + "size: ");
+        tableSize = input.nextInt();
+        tableRef.setSize(tableSize);
+        classValues = new int[tableSize];
+        freqValues = new int[tableSize];
+        System.out.println("Enter the data in the form of (" + className + " " + freqName + "):");
+        for (int i = 0; i < tableSize; i++) {
+            classValues[i] = input.nextInt();
+            freqValues[i] = input.nextInt();
+        }
+        tableRef.enterValue(classValues, freqValues);
     }
 }

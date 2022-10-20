@@ -6,19 +6,16 @@ public class Table {
     //Variables
     private int[] classValues, freqValues, intervalEnd;
     private double[] probOfOccurrence, cumulativeProb;
-    private int totalFreq;
+    private int totalFreq = 0;
 
-    //Constructor
-    Table(int tableSize) {
+    //Methods
+    public void setSize(int tableSize) {
         classValues = new int[tableSize];
         freqValues = new int[tableSize];
         intervalEnd = new int[tableSize];
         probOfOccurrence = new double[tableSize];
         cumulativeProb = new double[tableSize];
-        totalFreq = 0;
     }
-
-    //Methods
 
     public void enterValue(int[] givenClass, int[] givenFreq) {
         for (int i = 0; i < givenClass.length; i++) {
